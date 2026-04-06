@@ -60,7 +60,18 @@ def load_data():
 df_base = load_data()
 total_base_estatico = 50050 
 
-# ─── 2. BARRA LATERAL: FILTROS ───
+# ─── 2. BARRA LATERAL: LOGOS E FILTROS ───
+col_side1, col_side2 = st.sidebar.columns(2)
+
+with col_side1:
+    # Lendo o arquivo direto do seu repositório GitHub
+    st.image("logo_ceara.png", use_container_width=True)
+
+with col_side2:
+    # Lendo o arquivo direto do seu repositório GitHub
+    st.image("logo_digital.png", use_container_width=True)
+
+st.sidebar.markdown("---")
 st.sidebar.title("Filtros de Auditoria")
 lista_mod = ["Todas"] + sorted(list(df_base['modalidade'].dropna().unique()))
 sel_mod = st.sidebar.selectbox("📍 Modalidade", lista_mod)
