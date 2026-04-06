@@ -60,22 +60,32 @@ def load_data():
 df_base = load_data()
 total_base_estatico = 50050 
 
-# ─── 2. BARRA LATERAL: LOGOS E FILTROS ───
-# Logo do Ceará no Topo
-st.sidebar.image("logo_ceara.png", use_container_width=True)
-st.sidebar.markdown("---")
+# ─── 2. BARRA LATERAL: COMPACTA E FIXA ───
+# Logo do Ceará no Topo (Menor)
+st.sidebar.image("logo_ceara.png", width=120) 
 
-st.sidebar.title("🎯 Filtros de Auditoria")
+# Estilo CSS para diminuir os espaços vazios da Sidebar
+st.sidebar.markdown("""
+    <style>
+    [data-testid="stSidebar"] { min-width: 220px; max-width: 260px; }
+    [data-testid="stSidebarNav"] { display: none; }
+    .st-emotion-cache-16idsys p { margin-bottom: 0px; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.sidebar.subheader("Filtros")
+
+# Filtros em linha única para economizar altura
 lista_mod = ["Todas"] + sorted(list(df_base['modalidade'].dropna().unique()))
-sel_mod = st.sidebar.selectbox("📍 Modalidade", lista_mod)
+sel_mod = st.sidebar.selectbox("🎯 Modalidade", lista_mod, label_visibility="visible")
 
 lista_meses = ["Todos"] + sorted(list(df_base['Mês/Ano'].unique()))
-sel_mes = st.sidebar.selectbox("📅 Mês de Assinatura", lista_meses)
+sel_mes = st.sidebar.selectbox("📅 Mês Assinatura", lista_meses, label_visibility="visible")
 
-# Espaço e Logo da Digital College no final dos filtros
+# Logo da Digital College no final (Bem pequena e sem legenda longa)
 st.sidebar.markdown("---")
-st.sidebar.caption("Realização:")
-st.sidebar.image("logo_digital.png", use_container_width=True)
+st.sidebar.image("logo_digital.png", width=100)
+st.sidebar.caption("Digital College © 2024")
 
 # ─── 3. FILTRAGEM (MANTENHA ESTA PARTE IGUAL) ───
 df = df_base.copy()
@@ -87,7 +97,7 @@ total_anoms = len(df)
 # ─────────────────────────────────────────────────────────────────────────────
 # FRONT-END
 # ─────────────────────────────────────────────────────────────────────────────
-st.title("🔎 Monitoramento de Riscos - Ceará Transparente")
+st.title("Monitoramento de Riscos - Ceará Transparente")
 st.markdown(f"**Painel de Auditoria Digital** | Atualizado: {datetime.now().strftime('%d/%m/%Y')}")
 
 if total_anoms == 0:
@@ -113,7 +123,7 @@ st.write("---")
 col_esq, col_dir = st.columns([1.2, 1])
 
 with col_esq:
-    st.subheader("💰 Resumo Financeiro")
+    st.subheader("Resumo Financeiro")
     resumo = df.groupby('nivel_risco')['Valor Global (R$)'].sum().reset_index()
     resumo.columns = ['Nível de Risco', 'Valor Total']
     ordem_r = {'ALTO': 0, 'MÉDIO': 1, 'BAIXO': 2}
@@ -137,7 +147,7 @@ with col_esq:
                  use_container_width=True, hide_index=True)
 
 with col_dir:
-    st.subheader("🍕 Proporção de Risco")
+    st.subheader("Proporção de Risco")
     fig_p = px.pie(df, names='nivel_risco', hole=0.4, color='nivel_risco', 
                    color_discrete_map={'ALTO': '#FF4B4B', 'MÉDIO': '#FFA500', 'BAIXO': '#28A745'})
     fig_p.update_layout(margin=dict(t=20, b=20, l=20, r=20), legend=dict(orientation="h", y=-0.2))
