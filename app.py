@@ -92,7 +92,7 @@ if total_anoms > 0:
     df_orgao = df_orgao.sort_values('Qtd Anomalias', ascending=False)
     
     # Recalcula Modalidades
-    df_mod = df.groupby('modalidade')['Valor Global (R$)'].sum().reset_index()
+    df_mod = df_base.groupby('modalidade')['Valor Global (R$)'].sum().reset_index()
     df_mod.columns = ['modalidade', 'valor']
     df_mod = df_mod.sort_values('valor', ascending=False)
 else:
